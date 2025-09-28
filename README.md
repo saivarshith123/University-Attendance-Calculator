@@ -8,7 +8,7 @@ The project is available in multiple programming languages for the command-line 
 🌟 Features
 -----------
 
-*   **Dual Calculator Modes**: Switch between "Theory Calculator" and "Lab Calculator".
+*   **Dual Calculator Modes**: Switch between "Theory Calculator" and "Lab Calculator."
     
 *   **Current Percentage Calculation**: Instantly see your current attendance percentage for any course.
     
@@ -71,6 +71,19 @@ A sleek, modern, and responsive single-page web application is also available.
     
 
 The web interface is designed with an intuitive UI and provides a visually appealing experience with advanced CSS styling.
+
+### Self Attendance Tracker
+
+An additional feature is the "Self Attendance" tracker, which allows you to mark your attendance daily and view a summary.
+
+#### **How to Use:**
+
+1.  Open the index.html file in the Self Attendence directory in any modern web browser.
+    
+2.  Use the dashboard to mark your attendance for the day.
+    
+3.  View a summary of your attendance for all courses.
+    
 
 📝 Problem Statement
 --------------------
