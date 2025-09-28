@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Attendance Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+	:root {
+    --primary-color: #00f2ea;
+    --secondary-color: #ff007f;
+    --background-color: #1a1a2e;
+    --card-background: rgba(22, 22, 43, 0.55);
+    --text-color: #e0e0e0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 100px;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(26, 26, 46, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease-out, background-color 0.4s ease-out;
+    cursor: pointer;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: left 0.4s ease-out;
+    z-index: -1;
+}
+
+.nav-link.active {
+    color: #fff;
+}
+
+.nav-link.active::before {
+    left: 0;
+}
+
+.nav-link:not(.active):hover {
+    color: #fff;
+    background-color: var(--card-background);
+}
+
+.calculator-container {
+    width: 90%;
+    max-width: 550px;
+    margin-top: 30px;
+    background: var(--card-background);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.calculator-container:hover {
+    box-shadow: 0 0 40px var(--primary-color), 0 0 80px var(--secondary-color);
+    transform: translateY(-5px);
+}
+
+.calculator {
+    display: none;
+}
+
+.calculator.active {
+    display: block;
+}
+
+.calculator h2 {
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+    background: -webkit-linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.calculator p {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.calc-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background-size: 200% 100%;
+    transition: background-position 0.5s ease;
+}
+
+.calc-button:hover {
+    background-position: 100% 0;
+}
+
+.result-container {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    display: none;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.result-container.success {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.result-container.warning {
+    background: rgba(255, 152, 0, 0.2);
+    border: 1px solid var(--warning-color);
+    color: var(--warning-color);
+}
+
+.result-container.error {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid #f44336;
+    color: #f44336;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media screen and (max-height: 720px) {
+    body {
+        padding-top: 80px;
+    }
+
+    .calculator-container {
+        margin-top: 20px;
+        padding: 25px;
+    }
+
+    .calculator h2 {
+        font-size: 2.1em;
+    }
+
+    .calculator p {
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .result-container {
+        margin-top: 25px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a id="nav-theory" class="nav-link active" onclick="showCalculator('theory')">Theory Calculator</a>
+        <a id="nav-lab" class="nav-link" onclick="showCalculator('lab')">Lab Calculator</a>
+    </nav>
+
+    <div class="calculator-container">
+        <div id="theory-calculator" class="calculator active">
+            <h2>Theory Attendance</h2>
+            <p>Calculate attendance for your theory classes.</p>
+            <div class="input-group">
+                <label for="theory-total">Total Classes Conducted</label>
+                <input type="number" id="theory-total" class="input-field" placeholder="e.g., 50">
+            </div>
+            <div class="input-group">
+                <label for="theory-attended">Classes You Attended</label>
+                <input type="number" id="theory-attended" class="input-field" placeholder="e.g., 40">
+            </div>
+            <button id="theory-calc-btn" class="calc-button" onclick="calculateTheoryAttendance()">Calculate</button>
+            <div id="theory-result" class="result-container"></div>
+        </div>
+
+        <div id="lab-calculator" class="calculator">
+            <h2>Lab Attendance</h2>
+            <p>Enter hours as theory classes (2 hrs = 1 lab).</p>
+            <div class="input-group">
+                <label for="lab-total">Total Theory-Equivalent Hours</label>
+                <input type="number" id="lab-total" class="input-field" placeholder="e.g., 44">
+            </div>
+            <div class="input-group">
+                <label for="lab-attended">Theory-Equivalent Hours Attended</label>
+                <input type="number" id="lab-attended" class="input-field" placeholder="e.g., 30">
+            </div>
+            <button id="lab-calc-btn" class="calc-button" onclick="calculateLabAttendance()">Calculate</button>
+            <div id="lab-result" class="result-container"></div>
+        </div>
+    </div>
+
+    <script>
+	function showCalculator(type) {
+    const navTheory = document.getElementById('nav-theory');
+    const navLab = document.getElementById('nav-lab');
+    const theoryCalculator = document.getElementById('theory-calculator');
+    const labCalculator = document.getElementById('lab-calculator');
+
+    if (type === 'theory') {
+        labCalculator.classList.remove('active');
+        theoryCalculator.classList.add('active');
+        navLab.classList.remove('active');
+        navTheory.classList.add('active');
+    } else if (type === 'lab') {
+        theoryCalculator.classList.remove('active');
+        labCalculator.classList.add('active');
+        navTheory.classList.remove('active');
+        navLab.classList.add('active');
+    }
+}
+
+function showResult(element, message, type) {
+    element.innerHTML = message;
+    element.className = 'result-container ' + type;
+    element.style.display = 'block';
+}
+
+function calculateTheoryAttendance() {
+    const theoryTotalInput = document.getElementById('theory-total');
+    const theoryAttendedInput = document.getElementById('theory-attended');
+    const theoryResultDiv = document.getElementById('theory-result');
+
+    const total = parseInt(theoryTotalInput.value);
+    const attended = parseInt(theoryAttendedInput.value);
+
+    if (isNaN(total) || isNaN(attended) || total < 0 || attended < 0) {
+        showResult(theoryResultDiv, "Error: Please enter valid, non-negative numbers.", 'error');
+        return;
+    }
+    if (attended > total) {
+        showResult(theoryResultDiv, "Error: Attended classes cannot be greater than total classes.", 'error');
+        return;
+    }
+
+    const currentPercentage = total > 0 ? (attended / total) * 100 : 0;
+    let message = `Your current attendance is ${Math.floor(currentPercentage)}%.<br>`;
+
+    if (currentPercentage >= 75) {
+        const skippable = Math.floor((4 * attended / 3) - total);
+        const classText = skippable === 1 ? "class" : "classes";
+        message += `To maintain 75%, you can skip the next ${skippable} ${classText}.`;
+        showResult(theoryResultDiv, message, 'success');
+    } else {
+        const needed = (3 * total) - (4 * attended);
+        const classText = needed === 1 ? "class" : "classes";
+        message += `You must attend the next ${needed} consecutive ${classText} to reach 75%.`;
+        showResult(theoryResultDiv, message, 'warning');
+    }
+}
+
+function calculateLabAttendance() {
+    const labTotalInput = document.getElementById('lab-total');
+    const labAttendedInput = document.getElementById('lab-attended');
+    const labResultDiv = document.getElementById('lab-result');
+    
+    const totalTheory = parseInt(labTotalInput.value);
+    const attendedTheory = parseInt(labAttendedInput.value);
+
+    if (isNaN(totalTheory) || isNaN(attendedTheory) || totalTheory < 0 || attendedTheory < 0) {
+        showResult(labResultDiv, "Error: Please enter valid, non-negative numbers.", 'error');
+        return;
+    }
+    if (totalTheory % 2 !== 0 || attendedTheory % 2 !== 0) {
+        showResult(labResultDiv, "Error: Lab hour equivalents must be even numbers.", 'error');
+        return;
+    }
+    if (attendedTheory > totalTheory) {
+        showResult(labResultDiv, "Error: Attended hours cannot be greater than total hours.", 'error');
+        return;
+    }
+    
+    const totalLabs = Math.floor(totalTheory / 2);
+    const attendedLabs = Math.floor(attendedTheory / 2);
+    
+    const currentPercentage = totalLabs > 0 ? (attendedLabs / totalLabs) * 100 : 0;
+    let message = `Your current lab attendance is ${Math.floor(currentPercentage)}%.<br>`;
+
+    if (currentPercentage >= 75) {
+        const skippable = Math.floor((4 * attendedLabs / 3) - totalLabs);
+        const labText = skippable === 1 ? "lab" : "labs";
+        message += `To maintain 75%, you can skip the next ${skippable} ${labText}.`;
+        showResult(labResultDiv, message, 'success');
+    } else {
+        const needed = (3 * totalLabs) - (4 * attendedLabs);
+        const labText = needed === 1 ? "lab" : "labs";
+        message += `You must attend the next ${needed} consecutive ${labText} to reach 75%.`;
+        showResult(labResultDiv, message, 'warning');
+    }
+}
+
+    </script>
+</body>
+
+</html>
+

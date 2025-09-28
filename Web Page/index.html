@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Attendance Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <a id="nav-theory" class="nav-link active" onclick="showCalculator('theory')">Theory Calculator</a>
+        <a id="nav-lab" class="nav-link" onclick="showCalculator('lab')">Lab Calculator</a>
+    </nav>
+
+    <div class="calculator-container">
+        <div id="theory-calculator" class="calculator active">
+            <h2>Theory Attendance</h2>
+            <p>Calculate attendance for your theory classes.</p>
+            <div class="input-group">
+                <label for="theory-total">Total Classes Conducted</label>
+                <input type="number" id="theory-total" class="input-field" placeholder="e.g., 50">
+            </div>
+            <div class="input-group">
+                <label for="theory-attended">Classes You Attended</label>
+                <input type="number" id="theory-attended" class="input-field" placeholder="e.g., 40">
+            </div>
+            <button id="theory-calc-btn" class="calc-button" onclick="calculateTheoryAttendance()">Calculate</button>
+            <div id="theory-result" class="result-container"></div>
+        </div>
+
+        <div id="lab-calculator" class="calculator">
+            <h2>Lab Attendance</h2>
+            <p>Enter hours as theory classes (2 hrs = 1 lab).</p>
+            <div class="input-group">
+                <label for="lab-total">Total Theory-Equivalent Hours</label>
+                <input type="number" id="lab-total" class="input-field" placeholder="e.g., 44">
+            </div>
+            <div class="input-group">
+                <label for="lab-attended">Theory-Equivalent Hours Attended</label>
+                <input type="number" id="lab-attended" class="input-field" placeholder="e.g., 30">
+            </div>
+            <button id="lab-calc-btn" class="calc-button" onclick="calculateLabAttendance()">Calculate</button>
+            <div id="lab-result" class="result-container"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
